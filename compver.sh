@@ -10,7 +10,7 @@ current_version=$(git log HEAD --oneline --decorate | grep -Eo '\b[0-9]+\.[0-9]+
 develop_version=$(git log origin/develop --oneline --decorate | grep -Eo '\b[0-9]+\.[0-9]+\.[0-9]+\b' | sort -V | tail -n 1)
 
 # Compare versions
-if [[ $(printf "$current_version\n$develop_version" | sort -V | tail -n 1) == "$current_version" ]]; then
+if dpkg --compare-versions "$current_version" gt "$develop_version"; then
     echo "Die aktuelle Version ($current_version) ist größer als die Version im develop-Zweig ($develop_version)."
 else
     echo "Die aktuelle Version ($current_version) ist nicht größer als die Version im develop-Zweig ($develop_version)."
