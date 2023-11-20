@@ -3,8 +3,6 @@ run-name: Check for Tags on Merge
 
 on:
   pull_request:
-    types:
-      - closed
   workflow_dispatch:
 
 jobs:
