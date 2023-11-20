@@ -1,0 +1,26 @@
+name: Check for Tags on Merge
+
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  check-merged-branch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Check for tags
+        run: |
+          git fetch --tags
+          current_version=$(git log HEAD --oneline --decorate | grep -Eo '\b[0-9]+\.[0-9]+\.[0-9]+\b' | sort -V | tail -n 1)
+          develop_version=$(git log origin/develop --oneline --decorate | grep -Eo '\b[0-9]+\.[0-9]+\.[0-9]+\b' | sort -V | tail -n 1)
+          if [[ $(printf "$current_version\n$develop_version" | sort -V | tail -n 1) == "$current_version" ]]; then
+            echo "Version ($current_version) is greater than develop version ($develop_version)."
+          else
+            echo "Version ($current_version) is not greater than develop version ($develop_version)."
+            exit 1
+          fi
