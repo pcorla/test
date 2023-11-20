@@ -2,6 +2,9 @@
 
 
 git fetch --tags
+echo "git log HEAD  verbose"
+git log HEAD --oneline --decorate
+
 echo "git log HEAD"
 git log HEAD --oneline --decorate | grep -Eo '\b[0-9]+\.[0-9]+\.[0-9]+\b' | sort -V | tail -n 1
 
