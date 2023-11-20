@@ -1,4 +1,5 @@
 name: Check for Tags on Merge
+run-name: Check for Tags on Merge
 
 on:
   pull_request:
