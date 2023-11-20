@@ -1,5 +1,5 @@
-name: Check for Tags on Merge
-run-name: Check for Tags on Merge
+name: Check for version tag on PR merge
+run-name: Check for version tag on PR merge
 
 on:
   pull_request:
@@ -13,5 +13,5 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Check for tags
+      - name: Check for version tag
         run: ./compver.sh
