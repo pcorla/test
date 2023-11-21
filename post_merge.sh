@@ -5,10 +5,9 @@ function increment_version {
     current_version=$1
     part=$2
 
-    # Teile die aktuelle Versionsnummer auf
+    current_version=${current_version#v}
     IFS='.' read -r -a version_parts <<< "$current_version"
 
-    # Erhöhe den entsprechenden Teil der Versionsnummer
     case $part in
         "major")
             ((version_parts[0]++))
@@ -25,14 +24,14 @@ function increment_version {
     esac
 
     # Gib die neue Versionsnummer zurück
-    echo "${version_parts[0]}.${version_parts[1]}.${version_parts[2]}"
+    echo "v${version_parts[0]}.${version_parts[1]}.${version_parts[2]}"
 }
 
 merged_branch=$(git log HEAD --oneline --decorate -1)
 echo "$merged_branch"
 
 # Versionsnummer aus dem letzten Tag im develop-Branch holen
-last_version=$(git describe --abbrev=0 --tags develop 2>/dev/null || echo "0.0.0")
+last_version=$(git tag --sort=-v:refname 2>/dev/null || echo "0.0.0")
 
 # Überprüfen, ob "major", "minor" oder "patch" im Branch-Namen vorkommt
 if [[ $merged_branch == *"major"* ]]; then
