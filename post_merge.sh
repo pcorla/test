@@ -5,13 +5,7 @@ function increment_version {
     current_version=$1
     part=$2
 
-    current_version=${current_version#v}
-
-    #IFS='.' read -r major minor patch <<< "${current_version#v}"
-
-    major=$(echo "$current_version" | cut -d'.' -f1)
-    minor=$(echo "$current_version" | cut -d'.' -f2)
-    patch=$(echo "$current_version" | cut -d'.' -f3)
+    IFS='.' read -r major minor patch <<< "${current_version#v}"
 
     case $part in
         "major")
@@ -31,6 +25,8 @@ function increment_version {
     # Return new version
     echo "v${major}.${minor}.${patch}"
 }
+
+git fetch --tags
 
 merged_branch=$(git log HEAD --oneline --decorate -1)
 echo "$merged_branch"
