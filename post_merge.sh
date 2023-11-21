@@ -5,8 +5,6 @@ function increment_version {
     current_version=$1
     part=$2
 
-    current_version=${current_version#v}
-
     IFS='.' read -r major minor patch <<< "${current_version#v}"
 
     case $part in
