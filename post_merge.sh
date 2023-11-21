@@ -5,7 +5,13 @@ function increment_version {
     current_version=$1
     part=$2
 
-    IFS='.' read -r major minor patch <<< "${current_version#v}"
+    current_version=${current_version#v}
+
+    #IFS='.' read -r major minor patch <<< "${current_version#v}"
+
+    major=$(echo "$current_version" | cut -d'.' -f1)
+    minor=$(echo "$current_version" | cut -d'.' -f2)
+    patch=$(echo "$current_version" | cut -d'.' -f3)
 
     case $part in
         "major")
@@ -22,7 +28,7 @@ function increment_version {
             ;;
     esac
 
-    # Gib die neue Versionsnummer zurück
+    # Return new version
     echo "v${major}.${minor}.${patch}"
 }
 
