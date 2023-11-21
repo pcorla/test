@@ -10,16 +10,16 @@ function increment_version {
 
     # Erhöhe den entsprechenden Teil der Versionsnummer
     case $part in
-        "Major")
+        "major")
             ((version_parts[0]++))
             version_parts[1]=0
             version_parts[2]=0
             ;;
-        "Minor")
+        "minor")
             ((version_parts[1]++))
             version_parts[2]=0
             ;;
-        "Patch")
+        "patch")
             ((version_parts[2]++))
             ;;
     esac
@@ -34,17 +34,17 @@ merged_branch=$(git symbolic-ref --short HEAD)
 # Versionsnummer aus dem letzten Tag im develop-Branch holen
 last_version=$(git describe --abbrev=0 --tags develop 2>/dev/null || echo "0.0.0")
 
-# Überprüfen, ob "Major", "Minor" oder "Patch" im Branch-Namen vorkommt
-if [[ $merged_branch == *"Major"* ]]; then
-    new_version=$(increment_version "$last_version" "Major")
-elif [[ $merged_branch == *"Minor"* ]]; then
-    new_version=$(increment_version "$last_version" "Minor")
-elif [[ $merged_branch == *"Patch"* ]]; then
-    new_version=$(increment_version "$last_version" "Patch")
+# Überprüfen, ob "major", "minor" oder "patch" im Branch-Namen vorkommt
+if [[ $merged_branch == *"major"* ]]; then
+    new_version=$(increment_version "$last_version" "major")
+elif [[ $merged_branch == *"minor"* ]]; then
+    new_version=$(increment_version "$last_version" "minor")
+elif [[ $merged_branch == *"patch"* ]]; then
+    new_version=$(increment_version "$last_version" "patch")
 else
-    echo "Branch-Namen enthält keine Information über Versionsänderung."
+    echo "Branch name does not contain version change info"
     exit 0
 fi
 
 # Git-Tag im develop-Branch setzen
-git tag -a -m "Automatisches Tagging für Version $new_version" "v$new_version" develop
+git tag -a -m Automatic tagging of version $new_version" "v$new_version" develop
