@@ -4,7 +4,7 @@ run-name: Post Merge Action
 on:
   push:
     branches:
-      - 'main' # Adjust to your branch name
+      - 'develop'
 
 jobs:
   post-merge:
@@ -14,13 +14,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Get merged branch name
-        id: get_branch
-        run: echo "Merged branch name:: $(echo $GITHUB_REF | awk -F/ '{print $3}')"
-
       - name: Run post-merge script
         run: |
-          # Access the merged branch name using ${{ steps.get_branch.outputs.stdout }}
-          merged_branch="${{ steps.get_branch.outputs.stdout }}"
-          echo "Running post-merge actions for branch: $merged_branch"
-          ./post_merge.sh "$merged_branch"
+          export LATESTLOG=$(git log -1 --pretty=%B)
+          export SOURCEBRANCH=$(echo $LATESTLOG | awk -F '\\\\n' '{print $1}' |  awk -F '/' '{print $2}' | awk '{print $1}')
+          ./post_merge.sh "$SOURCEBRANCH"
