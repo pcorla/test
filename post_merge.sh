@@ -28,8 +28,9 @@ function increment_version {
     echo "${version_parts[0]}.${version_parts[1]}.${version_parts[2]}"
 }
 
+merged_branch=$1
 # Aktuellen Branch-Namen ermitteln
-merged_branch=$(git symbolic-ref --short HEAD)
+#merged_branch=$(git symbolic-ref --short HEAD)
 
 # Versionsnummer aus dem letzten Tag im develop-Branch holen
 last_version=$(git describe --abbrev=0 --tags develop 2>/dev/null || echo "0.0.0")
