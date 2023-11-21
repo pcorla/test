@@ -16,6 +16,6 @@ jobs:
 
       - name: Run post-merge script
         run: |
-          export SOURCEBRANCH=$(git log --merges -1 --pretty=%B')
+          export SOURCEBRANCH=$(git log --merges -1 --pretty=%B)
           echo "$SOURCEBRANCH"
           ./post_merge.sh "$SOURCEBRANCH"
