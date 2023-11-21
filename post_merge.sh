@@ -29,6 +29,8 @@ function increment_version {
 }
 
 merged_branch=$1
+echo "$merged_branch"
+
 # Aktuellen Branch-Namen ermitteln
 #merged_branch=$(git symbolic-ref --short HEAD)
 
