@@ -28,11 +28,8 @@ function increment_version {
     echo "${version_parts[0]}.${version_parts[1]}.${version_parts[2]}"
 }
 
-merged_branch=$(git log HEAD --oneline --decorate)
+merged_branch=$(git log HEAD --oneline --decorate -1)
 echo "$merged_branch"
-
-# Aktuellen Branch-Namen ermitteln
-#merged_branch=$(git symbolic-ref --short HEAD)
 
 # Versionsnummer aus dem letzten Tag im develop-Branch holen
 last_version=$(git describe --abbrev=0 --tags develop 2>/dev/null || echo "0.0.0")
@@ -50,4 +47,4 @@ else
 fi
 
 # Git-Tag im develop-Branch setzen
-git tag -a -m Automatic tagging of version $new_version" "v$new_version" develop
+git tag -a -m "Automatic tagging of version $new_version" "v$new_version" develop
