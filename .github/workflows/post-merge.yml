@@ -10,16 +10,19 @@ jobs:
   post-merge:
     runs-on: ubuntu-latest
 
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Git
         run: git config --global user.email "you@example.com" && git config --global user.name "Version Auto-Incrementer"
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run post-merge script
         run: |
           ./post_merge.sh
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
