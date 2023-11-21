@@ -1,0 +1,50 @@
+#!/bin/bash
+
+# Funktion zur Ermittlung der nächsten Versionsnummer
+function increment_version {
+    current_version=$1
+    part=$2
+
+    # Teile die aktuelle Versionsnummer auf
+    IFS='.' read -r -a version_parts <<< "$current_version"
+
+    # Erhöhe den entsprechenden Teil der Versionsnummer
+    case $part in
+        "Major")
+            ((version_parts[0]++))
+            version_parts[1]=0
+            version_parts[2]=0
+            ;;
+        "Minor")
+            ((version_parts[1]++))
+            version_parts[2]=0
+            ;;
+        "Patch")
+            ((version_parts[2]++))
+            ;;
+    esac
+
+    # Gib die neue Versionsnummer zurück
+    echo "${version_parts[0]}.${version_parts[1]}.${version_parts[2]}"
+}
+
+# Aktuellen Branch-Namen ermitteln
+merged_branch=$(git symbolic-ref --short HEAD)
+
+# Versionsnummer aus dem letzten Tag im develop-Branch holen
+last_version=$(git describe --abbrev=0 --tags develop 2>/dev/null || echo "0.0.0")
+
+# Überprüfen, ob "Major", "Minor" oder "Patch" im Branch-Namen vorkommt
+if [[ $merged_branch == *"Major"* ]]; then
+    new_version=$(increment_version "$last_version" "Major")
+elif [[ $merged_branch == *"Minor"* ]]; then
+    new_version=$(increment_version "$last_version" "Minor")
+elif [[ $merged_branch == *"Patch"* ]]; then
+    new_version=$(increment_version "$last_version" "Patch")
+else
+    echo "Branch-Namen enthält keine Information über Versionsänderung."
+    exit 0
+fi
+
+# Git-Tag im develop-Branch setzen
+git tag -a -m "Automatisches Tagging für Version $new_version" "v$new_version" develop
