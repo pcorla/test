@@ -17,12 +17,12 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Git
-        run: git config --global user.email "you@example.com" && git config --global user.name "Version Auto-Incrementer"
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+        run: git config --global user.email "you@example.com" && git config --global user.name "Version Auto-Incrementer"
 
       - name: Run post-merge script
-        run: |
-          ./post_merge.sh
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ./post_merge.sh
