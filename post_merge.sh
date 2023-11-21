@@ -46,5 +46,5 @@ else
 fi
 
 # Git-Tag im develop-Branch setzen
-git tag -a -m "Automatic tagging of version $new_version" "v$new_version" develop
-git push origin "v$new_version"
+git tag -a -m "Automatic tagging of version $new_version" "$new_version" develop
+git push origin "$new_version"
