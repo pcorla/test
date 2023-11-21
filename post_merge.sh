@@ -7,7 +7,7 @@ function increment_version {
 
     current_version=${current_version#v}
 
-    IFS='.' read -r major minor patch <<< "${version#v}"
+    IFS='.' read -r major minor patch <<< "${current_version#v}"
 
     case $part in
         "major")
