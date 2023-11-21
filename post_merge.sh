@@ -38,6 +38,8 @@ echo "$merged_branch"
 # Versionsnummer aus dem letzten Tag im develop-Branch holen
 last_version=$(git tag --sort=-v:refname 2>/dev/null || echo "0.0.0")
 
+echo "$last_version"
+
 # Überprüfen, ob "major", "minor" oder "patch" im Branch-Namen vorkommt
 if [[ $merged_branch == *"major"* ]]; then
     new_version=$(increment_version "$last_version" "major")
