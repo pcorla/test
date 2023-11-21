@@ -6,25 +6,26 @@ function increment_version {
     part=$2
 
     current_version=${current_version#v}
-    IFS='.' read -r -a version_parts <<< "$current_version"
+
+    IFS='.' read -r major minor patch <<< "${version#v}"
 
     case $part in
         "major")
-            ((version_parts[0]++))
-            version_parts[1]=0
-            version_parts[2]=0
+            ((major++))
+            minor=0
+            patch=0
             ;;
         "minor")
-            ((version_parts[1]++))
-            version_parts[2]=0
+            ((minor++))
+            patch=0
             ;;
         "patch")
-            ((version_parts[2]++))
+            ((patch++))
             ;;
     esac
 
     # Gib die neue Versionsnummer zurück
-    echo "v${version_parts[0]}.${version_parts[1]}.${version_parts[2]}"
+    echo "v${major}.${minor}.${patch}"
 }
 
 merged_branch=$(git log HEAD --oneline --decorate -1)
