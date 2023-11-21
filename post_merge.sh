@@ -28,7 +28,7 @@ function increment_version {
     echo "${version_parts[0]}.${version_parts[1]}.${version_parts[2]}"
 }
 
-merged_branch=$1
+merged_branch=$(git log --merges -1 --pretty=%B)
 echo "$merged_branch"
 
 # Aktuellen Branch-Namen ermitteln
