@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Funktion zur Ermittlung der nächsten Versionsnummer
 function increment_version {
     current_version=$1
     part=$2
@@ -22,7 +21,6 @@ function increment_version {
             ;;
     esac
 
-    # Return new version
     echo "v${major}.${minor}.${patch}"
 }
 
@@ -31,12 +29,10 @@ git fetch --tags
 merged_branch=$(git log HEAD --oneline --decorate -1)
 echo "$merged_branch"
 
-# Versionsnummer aus dem letzten Tag im develop-Branch holen
 last_version=$(git tag --sort=-v:refname 2>/dev/null || echo "0.0.0")
 
 echo "$last_version"
 
-# Überprüfen, ob "major", "minor" oder "patch" im Branch-Namen vorkommt
 if [[ $merged_branch == *"major"* ]]; then
     new_version=$(increment_version "$last_version" "major")
 elif [[ $merged_branch == *"minor"* ]]; then
@@ -44,10 +40,9 @@ elif [[ $merged_branch == *"minor"* ]]; then
 elif [[ $merged_branch == *"patch"* ]]; then
     new_version=$(increment_version "$last_version" "patch")
 else
-    echo "Branch name does not contain version change info"
-    exit 0
+    echo "Branch name does not contain version change info. Defaulting to increment patch version."
+    new_version=$(increment_version "$last_version" "patch")
 fi
 
-# Git-Tag im develop-Branch setzen
 git tag -a -m "Automatic tagging of version $new_version" "$new_version" develop
 git push origin "$new_version"

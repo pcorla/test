@@ -19,6 +19,6 @@ jobs:
 
       - name: Run post-merge script
         run: |
-          ./post_merge.sh
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          chmod +x scripts/post_merge.sh
+          ./scripts/post_merge.sh
+
