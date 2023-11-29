@@ -27,15 +27,17 @@ function increment_version {
 git fetch --tags
 
 if [[ "${GITHUB_SERVER_URL}" == "https://github.com" ]]; then
-  API_URL="https://api.github.com"
+  API_URL="https://api.github.com/repos"
 else
   API_URL="${GITHUB_SERVER_URL}/api/v3"
 fi
 
 # Get the Pull Request number
 PR_NUMBER=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
-  "${API_URL}/${GITHUB_REPOSITORY}/pulls?head=develop" \
+  "${API_URL}/${GITHUB_REPOSITORY}/pulls?base=develop&state=closed" \
   | grep -m 1 -oP '"number": \K[0-9]+')
+
+echo "PR_NUMBER: ${PR_NUMBER}"
 
 # Get the Pull Request labels using GitHub API
 LABELS=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
