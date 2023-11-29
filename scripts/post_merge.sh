@@ -34,6 +34,8 @@ fi
 
 echo "GitHub API URL: ${API_URL}"
 
+curl -s -H "Authorization: Bearer ${GITHUB_TOKEN}" "${API_URL}/pulls?base=develop&state=closed"
+
 # Get the Pull Request number
 PR_NUMBER=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
   "${API_URL}/pulls?base=develop&state=closed" \
