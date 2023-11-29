@@ -26,18 +26,36 @@ function increment_version {
 
 git fetch --tags
 
-merged_branch=$(git log HEAD --oneline --decorate -1)
-echo "$merged_branch"
+if [[ -n "${GITHUB_SERVER_URL}" ]]; then
+  API_URL="${GITHUB_SERVER_URL}/api/v3"
+else
+  API_URL="https://api.github.com"
+fi
+
+# Get the Pull Request number
+PR_NUMBER=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
+  "${API_URL}/${GITHUB_REPOSITORY}/pulls?head=develop" \
+  | grep -m 1 -oP '"number": \K[0-9]+')
+
+# Get the Pull Request labels using GitHub API
+LABELS=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
+  "${API_URL}/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/labels" \
+  | grep -oP '"name": "\K[^"]+' | tr '\n' ' ')
+
+# Print the labels
+echo "Labels: $LABELS"
+
+#merged_branch=$(git log HEAD --oneline --decorate -1)
+#echo "$merged_branch"
 
 last_version=$(git tag --sort=-v:refname 2>/dev/null || echo "0.0.0")
-
 echo "$last_version"
 
-if [[ $merged_branch == *"major"* ]]; then
+if [[ $LABELS == *"major"* ]]; then
     new_version=$(increment_version "$last_version" "major")
-elif [[ $merged_branch == *"minor"* ]]; then
+elif [[ $LABELS == *"minor"* ]]; then
     new_version=$(increment_version "$last_version" "minor")
-elif [[ $merged_branch == *"patch"* ]]; then
+elif [[ $LABELS == *"patch"* ]]; then
     new_version=$(increment_version "$last_version" "patch")
 else
     echo "Branch name does not contain version change info. Defaulting to increment patch version."
