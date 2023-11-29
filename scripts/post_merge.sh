@@ -26,10 +26,10 @@ function increment_version {
 
 git fetch --tags
 
-if [[ -n "${GITHUB_SERVER_URL}" ]]; then
-  API_URL="${GITHUB_SERVER_URL}/api/v3"
-else
+if [[ "${GITHUB_SERVER_URL}" == "https://github.com" ]]; then
   API_URL="https://api.github.com"
+else
+  API_URL="${GITHUB_SERVER_URL}/api/v3"
 fi
 
 # Get the Pull Request number
