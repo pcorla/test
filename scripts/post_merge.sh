@@ -42,6 +42,8 @@ LABELS=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
   "${API_URL}/${GITHUB_REPOSITORY}/issues/${PR_NUMBER}/labels" \
   | grep -oP '"name": "\K[^"]+' | tr '\n' ' ')
 
+echo "GitHub API URL: ${API_URL}/${GITHUB_REPOSITORY}"
+
 # Print the labels
 echo "Labels: $LABELS"
 
