@@ -27,14 +27,14 @@ function increment_version {
 git fetch --tags
 
 if [[ "${GITHUB_SERVER_URL}" == "https://github.com" ]]; then
+  # Standard
   API_URL="https://api.github.com/repos/${GITHUB_REPOSITORY}"
 else
+  # Enterprise
   API_URL="${GITHUB_SERVER_URL}/api/v3/${GITHUB_REPOSITORY}"
 fi
 
 echo "GitHub API URL: ${API_URL}"
-
-curl -s -H "Authorization: Bearer ${GITHUB_TOKEN}" "${API_URL}/pulls?base=develop&state=closed"
 
 # Get the Pull Request number
 PR_NUMBER=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
